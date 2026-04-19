@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BiraaZzz</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06080f;--surf:#0b1120;--card:#0f1a2e;--border:#1a2840;
+  --acc:#ff4d1c;--gold:#ffd234;--cyan:#00e5ff;--green:#00e676;
+  --text:#dce4f0;--mute:#4a5c72;--purple:#b06aff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.022) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:0 14px 80px}
+
+header{text-align:center;padding:40px 0 20px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,10vw,6rem);letter-spacing:8px;color:var(--acc);text-shadow:0 0 36px rgba(255,77,28,.55),0 0 80px rgba(255,77,28,.18);line-height:1}
+.logo-sub{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:5px;color:var(--cyan);opacity:.7;margin-top:6px}
+.fire{display:inline-block;animation:flick 1.3s ease-in-out infinite alternate}
+@keyframes flick{from{transform:scale(1)rotate(-3deg)}to{transform:scale(1.1)rotate(3deg)}}
+.hdiv{height:1px;background:linear-gradient(90deg,transparent,var(--acc) 40%,var(--acc) 60%,transparent);opacity:.3;margin:18px 0}
+
+/* SETUP */
+.setup-panel{background:var(--surf);border:2px solid var(--gold);border-radius:8px;padding:28px;margin-bottom:28px}
+.setup-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold);letter-spacing:3px;margin-bottom:6px}
+.setup-desc{font-size:.85rem;color:var(--mute);line-height:1.7;margin-bottom:18px}
+.setup-desc a{color:var(--cyan);text-decoration:none}
+.setup-steps{margin-bottom:18px}
+.step{display:flex;gap:12px;margin-bottom:10px;align-items:flex-start}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);min-width:24px}
+.step-txt{font-size:.85rem;color:var(--text);line-height:1.6}
+.step-txt code{background:var(--card);padding:1px 6px;border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--cyan)}
+.setup-inputs{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.setup-row{display:flex;flex-direction:column;gap:4px}
+.setup-lbl{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--mute);letter-spacing:2px;text-transform:uppercase}
+.setup-inp{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:10px 13px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:.82rem;outline:none;width:100%;transition:border-color .2s}
+.setup-inp:focus{border-color:var(--gold)}
+.setup-inp::placeholder{color:var(--mute)}
+.setup-save-btn{width:100%;padding:13px;background:var(--gold);border:none;border-radius:4px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;cursor:pointer;transition:all .2s}
+.setup-save-btn:hover{filter:brightness(1.1)}
+.setup-note{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--mute);text-align:center;margin-top:8px}
+
+/* SYNC BAR */
+.sync-bar{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:8px 13px;background:var(--surf);border:1px solid var(--border);border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:.7rem}
+.sync-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sync-dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
+.sync-dot.err{background:var(--acc)}
+.sync-dot.loading{background:var(--gold);animation:pulse .8s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:.4}to{opacity:1}}
+.sync-txt{color:var(--mute);flex:1}
+.reset-cfg-btn{padding:3px 10px;background:transparent;border:1px solid rgba(255,77,28,.3);border-radius:3px;color:rgba(255,77,28,.5);font-family:'Share Tech Mono',monospace;font-size:.65rem;cursor:pointer;transition:all .2s;letter-spacing:1px}
+.reset-cfg-btn:hover{border-color:var(--acc);color:var(--acc)}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.scard{background:var(--surf);border:1px solid var(--border);border-radius:4px;padding:12px;text-align:center}
+.snum{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);line-height:1}
+.slbl{font-size:.6rem;color:var(--mute);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+
+/* TABS */
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:22px;border:1px solid var(--border);border-radius:5px;overflow:hidden}
+.tab-btn{padding:13px 0;background:var(--surf);border:none;color:var(--mute);font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;cursor:pointer;transition:all .2s}
+.tab-btn.active{background:var(--card);color:var(--cyan);box-shadow:inset 0 -2px 0 var(--cyan)}
+.tab-btn:not(.active):hover{color:var(--text)}
+.panel{display:none}.panel.active{display:block}
+
+/* OBS BAR */
+.obs-bar{display:flex;align-items:center;gap:8px;margin-bottom:20px;background:var(--surf);border:1px solid var(--border);border-radius:4px;padding:10px 14px}
+.obs-label{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--mute);white-space:nowrap;letter-spacing:1px}
+.obs-url{flex:1;background:var(--card);border:1px solid var(--border);border-radius:3px;padding:6px 10px;color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.copy-btn{padding:6px 14px;background:transparent;border:1px solid var(--cyan);border-radius:3px;color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:.68rem;cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:1px}
+.copy-btn:hover{background:var(--cyan);color:#000}
+.copy-btn.copied{background:var(--green);border-color:var(--green);color:#000}
+
+/* CARD */
+.ucard{background:var(--surf);border:1px solid var(--border);border-radius:6px;padding:22px;margin-bottom:22px}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--cyan);letter-spacing:3px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.dropzone{border:2px dashed var(--border);border-radius:4px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.dropzone:hover,.dropzone.over{border-color:var(--acc);background:rgba(255,77,28,.04)}
+.dropzone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dicon{font-size:2rem;margin-bottom:8px}
+.dtxt{font-size:.85rem;color:var(--mute);line-height:1.6}
+.dtxt strong{color:var(--text)}
+.prev-wrap{display:none;margin-top:12px}
+.prev-wrap img{width:100%;max-height:260px;object-fit:contain;border-radius:4px;border:1px solid var(--border)}
+.abtn{display:none;width:100%;margin-top:11px;padding:12px;border:none;border-radius:4px;font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:3px;cursor:pointer;transition:all .2s}
+.abtn:disabled{opacity:.4;cursor:not-allowed}
+.btn-red{background:var(--acc);color:#fff}.btn-red:hover:not(:disabled){background:#ff6a3d;transform:translateY(-1px)}
+.btn-cyan{background:var(--cyan);color:#000}.btn-cyan:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px)}
+.btn-green{background:var(--green);color:#000}.btn-green:hover:not(:disabled){filter:brightness(1.1)}
+.ai-log{display:none;margin-top:10px;padding:10px 14px;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.12);border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--cyan)}
+.typing::after{content:'▌';animation:bl .7s step-end infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
+.rcard{display:none;margin-top:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:16px}
+.rrow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:.86rem}
+.rrow:last-child{border-bottom:none}
+.rk{color:var(--mute);font-family:'Share Tech Mono',monospace;font-size:.7rem}
+.rv{color:var(--text);font-weight:700;text-align:right}
+.badge{display:inline-block;padding:2px 8px;border-radius:2px;font-size:.65rem;font-family:'Share Tech Mono',monospace;letter-spacing:1px;text-transform:uppercase}
+.b-ok{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.3)}
+.b-err{background:rgba(255,77,28,.1);color:var(--acc);border:1px solid rgba(255,77,28,.3)}
+.b-no{background:rgba(74,92,114,.15);color:var(--mute);border:1px solid var(--border)}
+
+/* LEADERBOARD */
+.lbcard{background:var(--surf);border:1px solid var(--border);border-radius:6px;padding:22px}
+.srch{width:100%;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:9px 13px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.88rem;outline:none;margin-bottom:16px;transition:border-color .2s}
+.srch:focus{border-color:var(--cyan)}
+.srch::placeholder{color:var(--mute)}
+.lb-empty{text-align:center;padding:44px 0;color:var(--mute);font-family:'Share Tech Mono',monospace;font-size:.78rem}
+.lbe{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);animation:si .3s ease}
+@keyframes si{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+.lbe:last-child{border-bottom:none}
+.lbrank{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;text-align:center}
+.r1{color:var(--gold);text-shadow:0 0 12px rgba(255,210,52,.5)}
+.r2{color:#b0bec5}.r3{color:#bf8040}.rn{color:var(--mute)}
+.lbname{font-size:.98rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbsub{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--mute);margin-top:2px;display:flex;flex-wrap:wrap;gap:5px}
+.chip{background:var(--card);padding:1px 6px;border-radius:2px;border:1px solid var(--border)}
+.lbep{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--cyan);text-align:right}
+.lbthumb{width:36px;height:36px;object-fit:cover;border-radius:3px;border:1px solid var(--border);margin-top:4px;display:block;margin-left:auto}
+
+/* QUEUE */
+.q-add{display:flex;gap:8px;margin-bottom:18px}
+.q-input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:10px 13px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s}
+.q-input:focus{border-color:var(--purple)}
+.q-input::placeholder{color:var(--mute)}
+.q-add-btn{padding:10px 18px;background:var(--purple);border:none;border-radius:4px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;cursor:pointer;white-space:nowrap;transition:all .2s}
+.q-add-btn:hover{filter:brightness(1.15)}
+.q-empty{text-align:center;padding:44px 0;color:var(--mute);font-family:'Share Tech Mono',monospace;font-size:.78rem}
+.q-item{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:12px 14px;margin-bottom:8px;animation:si .3s ease}
+.q-item.current{border-color:var(--gold);background:rgba(255,210,52,.05)}
+.q-pos{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;text-align:center}
+.pos-1{color:var(--gold);text-shadow:0 0 10px rgba(255,210,52,.4)}
+.pos-n{color:var(--mute)}
+.q-name{font-size:1rem;font-weight:700}
+.q-tag{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--mute);margin-top:2px}
+.q-actions{display:flex;gap:6px;align-items:center}
+.skip-btn{padding:6px 12px;background:transparent;border:1px solid var(--purple);border-radius:3px;color:var(--purple);font-family:'Share Tech Mono',monospace;font-size:.68rem;cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:1px}
+.skip-btn:hover{background:var(--purple);color:#fff}
+.skip-btn:disabled{opacity:.25;cursor:not-allowed}
+.del-btn{padding:6px 10px;background:transparent;border:1px solid rgba(255,77,28,.3);border-radius:3px;color:rgba(255,77,28,.5);font-family:'Share Tech Mono',monospace;font-size:.68rem;cursor:pointer;transition:all .2s}
+.del-btn:hover{border-color:var(--acc);color:var(--acc)}
+.current-badge{display:inline-block;padding:2px 8px;background:rgba(255,210,52,.12);border:1px solid rgba(255,210,52,.3);border-radius:2px;color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:1px}
+
+/* POPUP */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.show{opacity:1;pointer-events:all}
+.popup{background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:34px 26px;max-width:360px;width:100%;text-align:center;transform:scale(.9) translateY(14px);transition:transform .28s cubic-bezier(.34,1.56,.64,1)}
+.overlay.show .popup{transform:scale(1) translateY(0)}
+.pop-icon{font-size:3.8rem;display:block;margin-bottom:12px;animation:popIn .4s cubic-bezier(.36,.07,.19,.97)}
+@keyframes popIn{0%{transform:scale(0)rotate(-10deg)}70%{transform:scale(1.18)rotate(3deg)}100%{transform:scale(1)rotate(0)}}
+.pop-title{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:4px;margin-bottom:8px}
+.red-t{color:var(--acc);text-shadow:0 0 20px rgba(255,77,28,.4)}
+.green-t{color:var(--green);text-shadow:0 0 18px rgba(0,230,118,.3)}
+.pop-body{font-size:.88rem;color:var(--mute);line-height:1.7;margin-bottom:22px}
+.pop-name{font-size:1.1rem;font-weight:700;color:var(--text);margin:8px 0 4px}
+.pop-ep{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--cyan);margin-bottom:4px}
+.pop-close{padding:10px 30px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:3px;cursor:pointer;transition:all .2s}
+.pop-close:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* TOAST */
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--surf);border:1px solid var(--border);border-radius:4px;padding:9px 20px;font-family:'Share Tech Mono',monospace;font-size:.76rem;z-index:200;transition:transform .3s;white-space:nowrap}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.ok{border-color:var(--green);color:var(--green)}
+#toast.err{border-color:var(--acc);color:var(--acc)}
+
+/* OBS MODE */
+body.obs-mode{background:transparent}
+body.obs-mode::after{display:none}
+body.obs-mode .wrap{padding:0;max-width:100%}
+body.obs-mode header,body.obs-mode .stats,body.obs-mode .tabs,
+body.obs-mode .ucard,body.obs-mode .obs-bar,body.obs-mode .sync-bar,
+body.obs-mode .setup-panel,body.obs-mode .hdiv{display:none!important}
+body.obs-mode .panel{display:none!important}
+body.obs-mode .panel.obs-show{display:block!important}
+body.obs-mode .lbcard{background:transparent;border:none;padding:4px}
+body.obs-mode .srch{display:none}
+body.obs-mode .q-actions{display:none!important}
+body.obs-mode .q-item{background:rgba(11,17,32,.85)}
+body.obs-mode .q-item.current{border-color:var(--gold);background:rgba(255,210,52,.07)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo"><span class="fire">🔥</span> BiraaZzz <span class="fire">🔥</span></div>
+  <div class="logo-sub">⬥ booyah leaderboard ⬥ real-time sync ⬥</div>
+</header>
+<div class="hdiv"></div>
+
+<!-- SETUP -->
+<div class="setup-panel" id="setup-panel">
+  <div class="setup-title">⚙️ SETUP JSONBIN — SEKALI SAJA</div>
+  <div class="setup-desc">Data leaderboard & antrian disimpan di <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> supaya sync real-time ke semua browser termasuk TikTok Live Studio.</div>
+  <div class="setup-steps">
+    <div class="step"><div class="step-num">1</div><div class="step-txt">Daftar gratis di <a href="https://jsonbin.io" target="_blank" style="color:var(--cyan)">jsonbin.io</a> → login</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-txt">Klik <strong>API Keys</strong> di menu kiri → <strong>+ Create Access Key</strong> → copy key-nya</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-txt">Paste di bawah → klik <strong>SIMPAN & MULAI</strong></div></div>
+  </div>
+  <div class="setup-inputs">
+    <div class="setup-row">
+      <span class="setup-lbl">JSONBin API Key</span>
+      <input class="setup-inp" id="cfg-apikey" type="password" placeholder="$2a$10$...">
+    </div>
+  </div>
+  <button class="setup-save-btn" onclick="setupSave()">⚡ SIMPAN &amp; MULAI</button>
+  <div class="setup-note">API key disimpan di browser kamu saja</div>
+</div>
+
+<!-- SYNC BAR -->
+<div class="sync-bar" id="sync-bar" style="display:none">
+  <div class="sync-dot loading" id="sync-dot"></div>
+  <span class="sync-txt" id="sync-txt">Menghubungkan...</span>
+  <button class="reset-cfg-btn" onclick="resetConfig()">GANTI API KEY</button>
+</div>
+
+<div class="stats" id="main-stats" style="display:none">
+  <div class="scard"><div class="snum" id="st-total">0</div><div class="slbl">Total Booyah</div></div>
+  <div class="scard"><div class="snum" id="st-ep">—</div><div class="slbl">Top EP</div></div>
+  <div class="scard"><div class="snum" id="st-q">0</div><div class="slbl">Antrian</div></div>
+</div>
+
+<div class="tabs" id="main-tabs" style="display:none">
+  <button class="tab-btn active" id="tab-lb"  onclick="switchTab('lb')">🏆 LEADERBOARD</button>
+  <button class="tab-btn"        id="tab-chk" onclick="switchTab('chk')">🔍 CEK BOOYAH</button>
+  <button class="tab-btn"        id="tab-q"   onclick="switchTab('q')">📋 ANTRIAN</button>
+</div>
+
+<!-- TAB LEADERBOARD -->
+<div class="panel active" id="panel-lb" style="display:none">
+  <div class="obs-bar">
+    <span class="obs-label">🖥 TIKTOK LIVE STUDIO ›</span>
+    <span class="obs-url" id="obs-lb-url">—</span>
+    <button class="copy-btn" onclick="copyObs('lb',this)">SALIN URL</button>
+  </div>
+  <div class="ucard">
+    <div class="sec-title"><span>📸</span> UPLOAD SCREENSHOT JUARA 1</div>
+    <div class="dropzone" id="dz-a">
+      <input type="file" id="fi-a" accept="image/*">
+      <div class="dicon">📁</div>
+      <div class="dtxt"><strong>Klik atau drag foto di sini</strong><br>Screenshot posisi Juara 1 / Booyah</div>
+    </div>
+    <div class="prev-wrap" id="prev-a"><img id="pimg-a" src="" alt="preview"></div>
+    <button class="abtn btn-red" id="analyze-a">⚡ ANALISA DENGAN AI</button>
+    <div class="ai-log" id="log-a"></div>
+    <div class="rcard" id="rc-a">
+      <div class="rrow"><span class="rk">NAMA JUARA 1</span><span class="rv" id="ra-name">—</span></div>
+      <div class="rrow"><span class="rk">USN / ID</span><span class="rv" id="ra-usn">—</span></div>
+      <div class="rrow"><span class="rk">EP</span><span class="rv" id="ra-ep">—</span></div>
+      <div class="rrow"><span class="rk">STATUS</span><span class="rv" id="ra-status">—</span></div>
+    </div>
+    <button class="abtn btn-green" id="confirm-a">✅ MASUKKAN KE LEADERBOARD</button>
+  </div>
+  <div class="lbcard">
+    <div class="sec-title"><span>🏆</span> HALL OF BOOYAH</div>
+    <input class="srch" type="text" id="srch" placeholder="Cari nama / USN..." oninput="renderLB(this.value)">
+    <div id="lb-list"><div class="lb-empty">— Memuat data... —</div></div>
+  </div>
+</div>
+
+<!-- TAB CEK BOOYAH -->
+<div class="panel" id="panel-chk" style="display:none">
+  <div class="ucard">
+    <div class="sec-title"><span>🔍</span> CEK APAKAH SUDAH PERNAH BOOYAH</div>
+    <div class="dropzone" id="dz-b">
+      <input type="file" id="fi-b" accept="image/*">
+      <div class="dicon">🖼️</div>
+      <div class="dtxt"><strong>Upload screenshot pemain</strong><br>AI deteksi nama/USN lalu cek ke leaderboard</div>
+    </div>
+    <div class="prev-wrap" id="prev-b"><img id="pimg-b" src="" alt="preview"></div>
+    <button class="abtn btn-cyan" id="analyze-b">🔍 CEK DENGAN AI</button>
+    <div class="ai-log" id="log-b"></div>
+    <div class="rcard" id="rc-b">
+      <div class="rrow"><span class="rk">NAMA TERDETEKSI</span><span class="rv" id="rb-name">—</span></div>
+      <div class="rrow"><span class="rk">USN / ID</span><span class="rv" id="rb-usn">—</span></div>
+      <div class="rrow"><span class="rk">EP TERDETEKSI</span><span class="rv" id="rb-ep">—</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB ANTRIAN -->
+<div class="panel" id="panel-q" style="display:none">
+  <div class="obs-bar">
+    <span class="obs-label">🖥 TIKTOK LIVE STUDIO ›</span>
+    <span class="obs-url" id="obs-q-url">—</span>
+    <button class="copy-btn" onclick="copyObs('q',this)">SALIN URL</button>
+  </div>
+  <div class="ucard">
+    <div class="sec-title"><span>📋</span> KELOLA ANTRIAN</div>
+    <div class="q-add">
+      <input class="q-input" id="q-name-input" type="text" placeholder="Masukkan nama / USN pemain..." maxlength="40">
+      <button class="q-add-btn" onclick="addQueue()">+ TAMBAH</button>
+    </div>
+    <div id="q-list"><div class="q-empty">— Antrian kosong —</div></div>
+  </div>
+</div>
+
+</div>
+
+<!-- POPUP -->
+<div class="overlay" id="popup">
+  <div class="popup">
+    <span class="pop-icon" id="pop-icon">🔒</span>
+    <div class="pop-title" id="pop-title">TITLE</div>
+    <div class="pop-body"  id="pop-body"></div>
+    <button class="pop-close" onclick="closePopup()">TUTUP</button>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────
+const CFG_KEY = 'biraazz_cfg';
+let cfg = JSON.parse(localStorage.getItem(CFG_KEY) || 'null');
+let entries = [], queue = [];
+let pendingA = null, b64A = null, b64B = null;
+let pollTimer = null;
+
+const JBIN = 'https://api.jsonbin.io/v3/b';
+// Proxy path — Netlify function
+const AI_PROXY = '/.netlify/functions/ai';
+
+// ── OBS MODE ────────────────────────────────────────
+const obsParam = new URLSearchParams(location.search).get('obs');
+if(obsParam){
+  document.body.classList.add('obs-mode');
+  document.getElementById(obsParam==='lb'?'panel-lb':'panel-q').classList.add('obs-show');
+  const p = new URLSearchParams(location.search);
+  if(p.get('k') && p.get('lb') && p.get('q')){
+    cfg = {apiKey:p.get('k'), lbBin:p.get('lb'), qBin:p.get('q')};
+  }
+  startApp();
+}
+
+// ── INIT ────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  if(obsParam) return;
+  if(cfg?.apiKey && cfg?.lbBin && cfg?.qBin){ showMain(); startApp(); }
+  setupDrops();
+});
+
+function showMain(){
+  document.getElementById('setup-panel').style.display='none';
+  document.getElementById('sync-bar').style.display='flex';
+  document.getElementById('main-stats').style.display='grid';
+  document.getElementById('main-tabs').style.display='grid';
+  ['panel-lb','panel-chk','panel-q'].forEach(id=>document.getElementById(id).style.display='block');
+  switchTab('lb');
+  setupObsUrls();
+}
+
+// ── SETUP ────────────────────────────────────────────
+async function setupSave(){
+  const apiKey = document.getElementById('cfg-apikey').value.trim();
+  if(!apiKey){toast('Masukkan API key dulu!','err');return;}
+  const btn = document.querySelector('.setup-save-btn');
+  btn.textContent='⏳ Membuat bin...'; btn.disabled=true;
+  try{
+    const lb = await fetch(JBIN,{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':apiKey,'X-Bin-Name':'biraazz-leaderboard','X-Bin-Private':'false'},body:JSON.stringify({entries:[]})});
+    if(!lb.ok) throw new Error('Gagal buat bin. Cek API key.');
+    const lbD = await lb.json();
+    const q = await fetch(JBIN,{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':apiKey,'X-Bin-Name':'biraazz-antrian','X-Bin-Private':'false'},body:JSON.stringify({queue:[]})});
+    if(!q.ok) throw new Error('Gagal buat bin antrian.');
+    const qD = await q.json();
+    cfg={apiKey,lbBin:lbD.metadata.id,qBin:qD.metadata.id};
+    localStorage.setItem(CFG_KEY,JSON.stringify(cfg));
+    showMain(); startApp();
+    toast('✔ Setup berhasil!','ok');
+  }catch(err){
+    toast(err.message,'err');
+    btn.textContent='⚡ SIMPAN & MULAI'; btn.disabled=false;
+  }
+}
+
+function resetConfig(){
+  if(!confirm('Reset konfigurasi API?'))return;
+  localStorage.removeItem(CFG_KEY); location.reload();
+}
+
+// ── JSONBIN ────────────────────────────────────────────
+async function readBin(id){
+  const r=await fetch(`${JBIN}/${id}/latest`,{headers:{'X-Master-Key':cfg.apiKey}});
+  if(!r.ok) throw new Error('Gagal baca bin');
+  return (await r.json()).record;
+}
+async function writeBin(id,rec){
+  const r=await fetch(`${JBIN}/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},body:JSON.stringify(rec)});
+  if(!r.ok) throw new Error('Gagal tulis bin');
+}
+
+// ── START / POLL ────────────────────────────────────────────
+async function startApp(){
+  setSyncStatus('loading','Menghubungkan...');
+  try{ await pullAll(); setSyncStatus('ok','Terhubung'); }
+  catch(e){ setSyncStatus('err','Gagal: '+e.message); }
+  if(pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(async()=>{
+    try{ await pullAll(); setSyncStatus('ok','Sync — '+new Date().toLocaleTimeString('id-ID')); }
+    catch(e){ setSyncStatus('err','Sync gagal'); }
+  }, 4000);
+}
+
+async function pullAll(){
+  const [lbR,qR]=await Promise.all([readBin(cfg.lbBin),readBin(cfg.qBin)]);
+  entries=lbR.entries||[]; queue=qR.queue||[];
+  renderLB(); renderQ();
+}
+
+function setSyncStatus(type,msg){
+  const d=document.getElementById('sync-dot'), t=document.getElementById('sync-txt');
+  if(!d)return; d.className='sync-dot '+type; t.textContent=msg;
+}
+
+async function saveEntries(){ await writeBin(cfg.lbBin,{entries}); renderLB(); }
+async function saveQueue(){ await writeBin(cfg.qBin,{queue}); renderQ(); }
+
+// ── OBS URLS ────────────────────────────────────────────
+function setupObsUrls(){
+  if(!cfg)return;
+  const base=location.href.split('?')[0];
+  const p=`k=${encodeURIComponent(cfg.apiKey)}&lb=${cfg.lbBin}&q=${cfg.qBin}`;
+  document.getElementById('obs-lb-url').textContent=`${base}?obs=lb&${p}`;
+  document.getElementById('obs-q-url').textContent=`${base}?obs=q&${p}`;
+}
+function copyObs(type,btn){
+  const id=type==='lb'?'obs-lb-url':'obs-q-url';
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+    btn.textContent='TERSALIN ✓'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='SALIN URL';btn.classList.remove('copied');},2500);
+  });
+}
+
+// ── TABS ────────────────────────────────────────────
+function switchTab(t){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('panel-'+t).classList.add('active');
+}
+
+// ── HELPERS ────────────────────────────────────────────
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function fmt(ts){const d=new Date(ts);return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}
+function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='show '+type;clearTimeout(el._t);el._t=setTimeout(()=>el.className='',3000)}
+function showPopup(icon,title,tCls,body){
+  document.getElementById('pop-icon').textContent=icon;
+  const t=document.getElementById('pop-title');t.textContent=title;t.className='pop-title '+tCls;
+  document.getElementById('pop-body').innerHTML=body;
+  document.getElementById('popup').classList.add('show');
+}
+function closePopup(){document.getElementById('popup').classList.remove('show')}
+document.getElementById('popup').addEventListener('click',e=>{if(e.target===e.currentTarget)closePopup()});
+function findInLB(name,usn,ep){
+  return entries.find(e=>{
+    const nm=name&&e.name&&e.name.toLowerCase()===name.toLowerCase();
+    const us=usn&&e.usn&&e.usn.toLowerCase()===usn.toLowerCase();
+    const ep_=ep&&e.ep&&e.ep.toString()===ep.toString();
+    return nm||us||ep_;
+  });
+}
+
+// ── STATS ────────────────────────────────────────────
+function updateStats(){
+  const s=document.getElementById('st-total');if(!s)return;
+  s.textContent=entries.length;
+  const eps=entries.map(e=>parseFloat(e.ep)||0).filter(v=>v>0);
+  document.getElementById('st-ep').textContent=eps.length?Math.max(...eps).toLocaleString():'—';
+  document.getElementById('st-q').textContent=queue.length;
+}
+
+// ── RENDER LB ────────────────────────────────────────────
+function renderLB(filter=''){
+  const list=document.getElementById('lb-list');if(!list)return;
+  let data=[...entries].sort((a,b)=>(parseFloat(b.ep)||0)-(parseFloat(a.ep)||0));
+  if(filter)data=data.filter(e=>(e.name||'').toLowerCase().includes(filter.toLowerCase())||(e.usn||'').toLowerCase().includes(filter.toLowerCase()));
+  if(!data.length){list.innerHTML='<div class="lb-empty">— Belum ada yang Booyah —</div>';updateStats();return;}
+  list.innerHTML='';
+  data.forEach((e,i)=>{
+    const rc=['r1','r2','r3'][i]||'rn',rk=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+    const el=document.createElement('div');el.className='lbe';
+    el.innerHTML=`<div class="lbrank ${rc}">${rk}</div><div><div class="lbname">${esc(e.name||'—')}</div><div class="lbsub">${e.usn?`<span class="chip">USN: ${esc(e.usn)}</span>`:''}<span class="chip">${fmt(e.ts)}</span></div></div><div><div class="lbep">${e.ep||'?'} EP</div>${e.thumb?`<img class="lbthumb" src="${e.thumb}" alt="">`:''}</div>`;
+    list.appendChild(el);
+  });
+  updateStats();
+}
+
+// ── RENDER QUEUE ────────────────────────────────────────────
+function renderQ(){
+  const list=document.getElementById('q-list');if(!list)return;
+  if(!queue.length){list.innerHTML='<div class="q-empty">— Antrian kosong —<br>Tambahkan nama pemain di atas</div>';updateStats();return;}
+  list.innerHTML='';
+  queue.forEach((item,i)=>{
+    const isCurrent=i===0;
+    const el=document.createElement('div');el.className='q-item'+(isCurrent?' current':'');
+    el.innerHTML=`<div class="q-pos ${isCurrent?'pos-1':'pos-n'}">${isCurrent?'▶':(i+1)}</div><div><div class="q-name">${esc(item.name)}</div><div class="q-tag">${isCurrent?'<span class="current-badge">▶ GILIRAN SEKARANG</span>':'Antrian ke-'+(i+1)}</div></div><div class="q-actions"><button class="skip-btn" onclick="skipQueue(${i})" ${i===0?'disabled':''}>⬆ SKIP</button><button class="del-btn" onclick="removeQueue(${i})">✕</button></div>`;
+    list.appendChild(el);
+  });
+  updateStats();
+}
+
+// ── QUEUE ACTIONS ────────────────────────────────────────────
+async function addQueue(){
+  const inp=document.getElementById('q-name-input'),name=inp.value.trim();
+  if(!name){toast('Masukkan nama dulu!','err');return;}
+  queue.push({name,id:Date.now()}); inp.value='';
+  try{await saveQueue();toast('✔ '+name+' ditambahkan','ok');}catch(e){toast('Gagal: '+e.message,'err');}
+}
+document.getElementById('q-name-input').addEventListener('keydown',e=>{if(e.key==='Enter')addQueue();});
+async function skipQueue(idx){
+  if(idx<=0)return;
+  [queue[idx-1],queue[idx]]=[queue[idx],queue[idx-1]];
+  try{await saveQueue();toast('⬆ Antrian dinaikan','ok');}catch(e){toast('Gagal','err');}
+}
+async function removeQueue(idx){
+  const name=queue[idx]?.name; queue.splice(idx,1);
+  try{await saveQueue();toast('✕ '+name+' dihapus','err');}catch(e){toast('Gagal','err');}
+}
+
+// ── FILE DROPS ────────────────────────────────────────────
+function setupDrops(){
+  setupDrop('dz-a','fi-a','prev-a','pimg-a',v=>b64A=v,'analyze-a','a');
+  setupDrop('dz-b','fi-b','prev-b','pimg-b',v=>b64B=v,'analyze-b','b');
+}
+function setupDrop(dzId,fiId,prevId,pimgId,setter,abtnId,which){
+  const dz=document.getElementById(dzId),fi=document.getElementById(fiId);
+  if(!dz||!fi)return;
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')});
+  dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+  dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');handle(e.dataTransfer.files[0])});
+  fi.addEventListener('change',e=>handle(e.target.files[0]));
+  function handle(file){
+    if(!file||!file.type.startsWith('image/')){toast('Hanya file gambar!','err');return;}
+    const r=new FileReader();
+    r.onload=ev=>{
+      setter(ev.target.result.split(',')[1]);
+      document.getElementById(pimgId).src=ev.target.result;
+      document.getElementById(prevId).style.display='block';
+      document.getElementById(abtnId).style.display='block';
+      if(which==='a'){['rc-a','confirm-a','log-a'].forEach(id=>document.getElementById(id).style.display='none');pendingA=null;}
+      else{['rc-b','log-b'].forEach(id=>document.getElementById(id).style.display='none');}
+    };
+    r.readAsDataURL(file);
+  }
+}
+
+// ── AI CALL via PROXY ────────────────────────────────────────────
+async function callAI(base64,promptText){
+  const res=await fetch(AI_PROXY,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:'image/jpeg',data:base64}},
+        {type:'text',text:promptText}
+      ]}]
+    })
+  });
+  if(!res.ok) throw new Error('AI proxy error: '+res.status);
+  const data=await res.json();
+  const raw=data.content?.map(c=>c.text||'').join('');
+  return JSON.parse(raw.replace(/```json|```/g,'').trim());
+}
+
+const P_LB=`Kamu adalah AI pembaca screenshot game Battle Royale (Free Fire, BGMI, PUBG Mobile, dll).
+TUGAS: Deteksi HANYA pemain JUARA 1/posisi pertama yang terlihat di layar ini.
+Jawab HANYA format JSON tanpa teks lain:
+{"name":"nama pemain juara 1 atau null","usn":"username/ID unik atau null","ep":"jumlah EP sebagai string angka atau null","is_booyah":true atau false,"confidence":"HIGH atau MEDIUM atau LOW"}`;
+
+const P_CHK=`Kamu adalah AI pembaca screenshot game Battle Royale (Free Fire, BGMI, PUBG Mobile, dll).
+TUGAS: Deteksi nama dan identitas pemain yang tampil di screenshot ini.
+Jawab HANYA format JSON tanpa teks lain:
+{"name":"nama pemain atau null","usn":"username/ID unik atau null","ep":"jumlah EP sebagai string angka atau null","confidence":"HIGH atau MEDIUM atau LOW"}`;
+
+// ANALYZE A
+document.getElementById('analyze-a').addEventListener('click',async()=>{
+  if(!b64A)return;
+  const btn=document.getElementById('analyze-a');btn.disabled=true;
+  const log=document.getElementById('log-a');
+  log.style.display='block';log.className='ai-log typing';log.textContent='AI membaca screenshot juara 1...';
+  ['rc-a','confirm-a'].forEach(id=>document.getElementById(id).style.display='none');pendingA=null;
+  try{
+    const p=await callAI(b64A,P_LB);
+    log.className='ai-log';log.textContent=`✔ Selesai — Confidence: ${p.confidence||'?'}`;
+    document.getElementById('ra-name').textContent=p.name||'— tidak terdeteksi —';
+    document.getElementById('ra-usn').textContent=p.usn||'— tidak terdeteksi —';
+    document.getElementById('ra-ep').textContent=p.ep?p.ep+' EP':'— tidak terdeteksi —';
+    const dupe=findInLB(p.name,p.usn,p.ep);
+    if(dupe){
+      document.getElementById('ra-status').innerHTML='<span class="badge b-err">🔒 SUDAH TERDAFTAR</span>';
+      showPopup('🔒','SUDAH PERNAH BOOYAH!','red-t',`<div class="pop-name">${esc(dupe.name||'—')}</div><div class="pop-ep">${dupe.ep||'?'} EP</div><br>Pemain ini sudah ada di leaderboard dan tidak bisa didaftarkan lagi.`);
+    }else if(!p.is_booyah){
+      document.getElementById('ra-status').innerHTML='<span class="badge b-no">✗ Bukan Booyah</span>';
+    }else{
+      document.getElementById('ra-status').innerHTML='<span class="badge b-ok">✔ BISA MASUK</span>';
+      pendingA={name:p.name||'Unknown',usn:p.usn||null,ep:p.ep||null,booyah:true,thumb:'data:image/jpeg;base64,'+b64A,ts:Date.now()};
+      document.getElementById('confirm-a').style.display='block';
+    }
+    document.getElementById('rc-a').style.display='block';
+  }catch(err){log.className='ai-log';log.textContent='⚠ Error: '+err.message;toast('Gagal analisa: '+err.message,'err');}
+  btn.disabled=false;
+});
+
+document.getElementById('confirm-a').addEventListener('click',async()=>{
+  if(!pendingA)return;
+  entries.push(pendingA);
+  try{
+    await saveEntries();
+    showPopup('🏆','BOOYAH TERCATAT!','green-t',`<div class="pop-name">${esc(pendingA.name)}</div><div class="pop-ep">${pendingA.ep||'?'} EP</div><br>Selamat! Sudah masuk ke Hall of Booyah 🎉`);
+    toast('🔥 Berhasil!','ok');
+    pendingA=null;b64A=null;
+    ['prev-a','analyze-a','rc-a','confirm-a','log-a'].forEach(id=>document.getElementById(id).style.display='none');
+    document.getElementById('fi-a').value='';
+  }catch(e){toast('Gagal simpan: '+e.message,'err');entries.pop();}
+});
+
+// ANALYZE B
+document.getElementById('analyze-b').addEventListener('click',async()=>{
+  if(!b64B)return;
+  const btn=document.getElementById('analyze-b');btn.disabled=true;
+  const log=document.getElementById('log-b');
+  log.style.display='block';log.className='ai-log typing';log.textContent='AI mendeteksi pemain...';
+  document.getElementById('rc-b').style.display='none';
+  try{
+    const p=await callAI(b64B,P_CHK);
+    log.className='ai-log';log.textContent=`✔ Selesai — Confidence: ${p.confidence||'?'}`;
+    document.getElementById('rb-name').textContent=p.name||'— tidak terdeteksi —';
+    document.getElementById('rb-usn').textContent=p.usn||'— tidak terdeteksi —';
+    document.getElementById('rb-ep').textContent=p.ep?p.ep+' EP':'— tidak terdeteksi —';
+    document.getElementById('rc-b').style.display='block';
+    const found=findInLB(p.name,p.usn,p.ep);
+    if(found){
+      showPopup('🔒','SUDAH PERNAH BOOYAH!','red-t',`<div class="pop-name">${esc(found.name||'—')}</div><div class="pop-ep">${found.ep||'?'} EP</div><br>Pemain ini sudah tercatat. Tidak bisa ikut lagi! 🚫`);
+    }else if(p.name||p.usn){
+      showPopup('✅','BELUM PERNAH BOOYAH','green-t',`<div class="pop-name">${esc(p.name||p.usn||'—')}</div>${p.ep?`<div class="pop-ep">${p.ep} EP</div>`:''}<br>Pemain ini belum pernah Booyah. Masih bisa ikut! ✔`);
+    }else{
+      showPopup('❓','TIDAK TERDETEKSI','',`AI tidak bisa mendeteksi nama pemain.<br>Coba screenshot yang lebih jelas.`);
+    }
+  }catch(err){log.className='ai-log';log.textContent='⚠ Error: '+err.message;toast('Gagal analisa: '+err.message,'err');}
+  btn.disabled=false;
+});
+</script>
+</body>
+</html>
